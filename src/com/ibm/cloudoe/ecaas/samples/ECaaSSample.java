@@ -63,6 +63,9 @@ public class ECaaSSample extends HttpServlet {
 			Object retrievedValue;
 			String mapName = "sample.NONE.P";
 			//Process operation value and return processing results 
+			
+			//
+			
 			if ("get".equals(operation)) {
 				// get value of this key.
 				retrievedValue = ECacheConnection.getData(mapName, key);
