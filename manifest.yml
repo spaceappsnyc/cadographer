@@ -1,0 +1,11 @@
+applications:
+- services:
+  - asteroid-DataCache
+  - asteroid-MonitoringAndAnalytics
+  disk_quota: 1024M
+  host: asteroid
+  name: asteroid
+  path: cacheSampleJavaNativeAPIs.war
+  domain: mybluemix.net
+  instances: 1
+  memory: 512M
