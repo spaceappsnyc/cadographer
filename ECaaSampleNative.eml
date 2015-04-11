@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component inheritJdk="true">
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="javax.servlet_3.0.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/dep-jar/javax.servlet_3.0.0.jar!/"/>
+	</lib>
+	<lib name="wsogclient.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/dep-jar/wsogclient.jar!/"/>
+	</lib>
+	<lib name="JSON4J.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/WebContent/WEB-INF/lib/JSON4J.jar!/"/>
+	</lib>
+</component>

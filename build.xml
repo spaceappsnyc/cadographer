@@ -9,7 +9,7 @@
     <condition property="ARCHIVE_DIR" value="${env.ARCHIVE_DIR}" else=".">
         <isset property="env.ARCHIVE_DIR" />
     </condition>
-	<property name="warname" value= "cacheSampleJavaNativeAPIs.war"/>
+	<property name="warname" value= "ROOT.war"/>
     <path id="classpathDir">
         <pathelement location="bin"/>
 		<pathelement location="WebContent/WEB-INF/lib/JSON4J.jar"/>
@@ -51,6 +51,15 @@
 	  	</fileset>
 		<classes dir="bin"/>
 	  </war>
+	<exec executable="apache-tomcat-7.0.61/bin/shutdown.sh"/>
+	<delete file="apache-tomcat-7.0.61/webapps/${warname}" />
+	<delete dir="apache-tomcat-7.0.61/webapps/ROOT" />
+	<copy todir="apache-tomcat-7.0.61/webapps">
+		<fileset file="${ARCHIVE_DIR}/${warname}" />
+	</copy>
+	<exec executable="apache-tomcat-7.0.61/bin/startup.sh"/>
+
+
    </target>
 
 </project>

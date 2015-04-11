@@ -5,7 +5,7 @@ applications:
   disk_quota: 1024M
   host: asteroid
   name: asteroid
-  path: cacheSampleJavaNativeAPIs.war
+  path: ROOT.war
   domain: mybluemix.net
   instances: 1
   memory: 512M
