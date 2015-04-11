@@ -8,6 +8,7 @@
 *.so
 *.war
 apache-tomcat-7.0.61/webapps/ROOT
+apache-tomcat-7.0.61/logs
 
 
 # Packages #

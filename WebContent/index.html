@@ -1,98 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>AsteroidExplorer</title>
-<link rel='stylesheet' href='css/style.css' />
-<script language="javascript" type="text/javascript">
-	function load() {
-		sendRequest('all');
-		document.getElementById('get').addEventListener("click", getClicked, false);
-		document.getElementById('put').addEventListener("click", putClicked, false);
-		document.getElementById('delete').addEventListener("click", deleteClicked, false);
-	}
+<!doctype html>
+<html class="no-js" lang="">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<title></title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	function inputKey() {
-		document.getElementById('echo').innerHTML = "";
-		sendRequest('all');
-	}
-	
-	function hasInputKey() {
-		var key = document.getElementById('key').value;
-		if(key == ''){
-			document.getElementById('echo').innerHTML = 'Please input key.';
-			document.getElementById('key').focus();
-			return false;
-		}
-		return true;
-	}
+		<link rel="apple-touch-icon" href="apple-touch-icon.png">
+		<!-- Place favicon.ico in the root directory -->
 
-	function sendRequest(operation) {
-		var ajaxRequest;
-		var key = encodeURIComponent(document.getElementById('key').value);
-		var value = encodeURIComponent(document.getElementById('value').value);
+		<link rel="stylesheet" href="css/normalize.css">
+		<link rel="stylesheet" href="css/main.css">
+	</head>
+	<body>
+		<!-- Add your site or application content here -->
+		<p>Hello world! This is HTML5 Boilerplate.</p>
 
-		ajaxRequest = new XMLHttpRequest();
-		ajaxRequest.onreadystatechange = function() {
-			if (ajaxRequest.readyState == 4 && ajaxRequest.status == 200) {
-				var result = ajaxRequest.responseText;
-				if (operation == 'all') {
-					var resHTML = '<tr></tr>';
-					var allECacheObj = JSON.parse(ajaxRequest.responseText);
-					if (allECacheObj && allECacheObj.length
-							&& allECacheObj.length > 0) {
-						resHTML = '';
-						for ( var i = 0; i < allECacheObj.length; i++) {
-							resHTML += '<tr><td>' + allECacheObj[i]['key'] + '</td><td>' + allECacheObj[i]['value'] + '</td></tr>';
-						}
-					}
-					document.getElementById('res').innerHTML = resHTML;
-				} else {
-					document.getElementById('echo').innerHTML = "";
-					if (operation == "get") {
-						if (result == 'null') {
-							document.getElementById('echo').innerHTML = "No entry is found."
-							document.getElementById('key').value = "";
-							document.getElementById('value').value = "";
-						} else {
-							document.getElementById('value').value = result;
-							document.getElementById('echo').innerHTML = "The value for key "+key+" was retrieved successfully.";
-						}
-					} else {
-						if (operation == "delete") {
-							document.getElementById('key').value = "";
-							document.getElementById('value').value = "";
-						}
-						document.getElementById('echo').innerHTML = result;
-					}
-					sendRequest('all');
-				}
-			}
-		}
-
-		ajaxRequest.open("GET", "/ecaas?operation=" + operation + "&key=" + key + "&value=" + value, true);
-		ajaxRequest.send(null);
-	}
-
-	function getClicked() {
-		if(hasInputKey())
-			sendRequest('get');
-	}
-	function putClicked() {
-		if(hasInputKey())
-			sendRequest('put');
-	}
-	function deleteClicked() {
-		if(hasInputKey())
-			sendRequest('delete');
-	}
-</script>
-</head>
-<body onload="load();">
-	<h1>
-		Welcome to AsteroidExplorer!
-	</h1>
-	<br />
-	
-</body>
+		<script src="js/plugins.js"></script>
+		<script src="js/main.js"></script>
+	</body>
 </html>
