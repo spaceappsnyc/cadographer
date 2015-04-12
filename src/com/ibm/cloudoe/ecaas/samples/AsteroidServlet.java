@@ -1,8 +1,7 @@
 package com.ibm.cloudoe.ecaas.samples;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.util.List;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,11 +9,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ibm.json.java.JSONArray;
+import com.ibm.json.java.JSONArtifact;
 import com.ibm.json.java.JSONObject;
 
 @WebServlet(urlPatterns ="/asteroid", loadOnStartup=1)
 public class AsteroidServlet extends HttpServlet {
 	private static final long serialVersionUID = 2L;
+	private static HashMap _asteroids;
+	
+	public static final String DATA_SOURCE = "http://www.minorplanetcenter.net/iau/MPCORB/NEA.txt";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -50,20 +54,15 @@ public class AsteroidServlet extends HttpServlet {
 		try {
 			//get request data
 			String key = request.getParameter("key");
-			String operation = request.getParameter("operation");
-			String newValue = request.getParameter("value");
 			//Object retrievedValue;
 			//String mapName = "sample.NONE.P";
 			//Process operation value and return processing results 
 			
+			makeAsteroids();
 			
-			HttpFetcher fetcher = new HttpFetcher();
-			String fetched = fetcher.sendGet();
-
-			JSONObject json = new JSONObject();
-			json.put("stuff", fetched);
+			JSONArtifact json = shipAsteroids();
 			
-			response.getWriter().write(json.toString());
+			response.getWriter().write(json.serialize());
 			
 			//
 			
@@ -94,6 +93,25 @@ public class AsteroidServlet extends HttpServlet {
 			System.out.println("Failed to perform operation on map.");
 			e.printStackTrace();
 			response.setStatus(500);
+		}
+	}
+
+	private JSONObject shipAsteroids() {
+		// send all asteroids as JSON
+	
+		JSONObject jsonAs = new JSONObject();
+		
+		jsonAs.putAll(_asteroids);
+		
+		return jsonAs;
+	}
+
+	private void makeAsteroids() throws Exception{
+		// TODO Auto-generated method stub
+		if (_asteroids == null){
+			AsteroidBuilder builder = new AsteroidBuilder();
+			_asteroids = builder.buildWith(DATA_SOURCE);
+			
 		}
 	}
 	
