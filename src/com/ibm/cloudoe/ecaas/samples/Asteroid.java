@@ -1,5 +1,6 @@
 package com.ibm.cloudoe.ecaas.samples;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.ibm.json.java.JSONObject;
@@ -13,22 +14,50 @@ public class Asteroid extends JSONObject{
 	public Asteroid(MinorPlanetLine record)
 	{
 		super();
-		this.putAll(record.getMap());
 		_record = record;
+		
+		this.putAll(record.getMap());
+		this.put(MinorPlanetLine.OBJECT_TYPE, MinorPlanetLine.ASTEROID);
+	}
+
+	public Asteroid(HashMap hashMap) {
+		super();
+		this.putAll(hashMap);
 	}
 
 	public Object getName() {
-		// TODO Auto-generated method stub
-		return _record.getName().trim();
+		
+		return ((String)this.get(MinorPlanetLine.NAME)).trim();
+	}
+	
+	public void makeComet()
+	{
+		this.put(MinorPlanetLine.OBJECT_TYPE, MinorPlanetLine.COMET);
 	}
 
-	public void setSizeKey() {
-		String strDiam = (String)this.get("estDiam");
+	public void setUpRelativeSize() {
 		
-		//if(not)
 		
-		//this.put(sizeRange, arg1);
+		String strDiam = (String)this.get(MinorPlanetLine.EST_DIAM);
+		
+		if (strDiam != null)
+		{
+			Double diam = Double.valueOf(strDiam);
+			String relSize = "large";
+			
+			if (diam < 1)
+			{
+				relSize = "small";
+			} else if (diam < 2)
+			{
+				relSize = "medium";
+			}
+			
+			this.put(MinorPlanetLine.REL_SIZE, relSize);
+				
+		}
 		
 	}
+
 	
 }

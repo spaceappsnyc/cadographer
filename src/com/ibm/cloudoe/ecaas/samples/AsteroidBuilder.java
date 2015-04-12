@@ -64,9 +64,6 @@ public class AsteroidBuilder {
 		BufferedReader in = new BufferedReader(new FileReader(new File(
 				"WebContent/impactdatalite.csv")));
 		String inputLine = null;
-		final String EST_DIAM = "estDiam";
-		final String EST_VALUE = "estValue";
-		final String COMPOSITION = "composition";
 		
 		HashMap threatDataMap = new HashMap();
 
@@ -82,7 +79,7 @@ public class AsteroidBuilder {
 			values.put("potentialImpacts", data[2]);
 			values.put("impactProb", data[3]);
 			values.put("vKmPerSec", data[4]);
-			values.put(EST_DIAM, data[6]);
+			values.put(MinorPlanetLine.EST_DIAM, data[6]);
 			values.put("palermoScaleCum", data[7]);
 			values.put("palermoScaleMax", data[8]);
 			values.put("torinoScale", data[9]);
@@ -100,30 +97,48 @@ public class AsteroidBuilder {
 			// entry.getValue());
 			// pick the corresponding entry from the enrichment data
 
+			Asteroid asteroid = (Asteroid)entry.getValue();
+			
+			
 			HashMap extraValues = (HashMap) threatDataMap.get(entry.getKey());
 			
 
 			// add it to the asteroid's map
 			if (extraValues != null)
 			{
-				Asteroid asteroid = (Asteroid)entry.getValue();
 				asteroid.putAll(extraValues);	
 			}
-			
+			asteroid.setUpRelativeSize();
 		}
 		
-		// Do us a couple special ones
+		// Enrich a couple special ones
 		Asteroid eros = (Asteroid) asteroids.get("Eros");
-		eros.put(EST_DIAM, "11.2");
-		eros.put(EST_VALUE, "2400000000");
-		eros.put(COMPOSITION, "aluminum, gold, platinum");
-		//eros.setSizeKey();
-				
-		Asteroid _1986_DA = (Asteroid) asteroids.get("1986 DA");
-		_1986_DA.put(EST_DIAM, "2.2");
-		_1986_DA.put(EST_VALUE, "5000000");
-		_1986_DA.put(COMPOSITION, "gold, platinum, iron");
+		eros.put(MinorPlanetLine.EST_DIAM, "11.2");
+		eros.put(MinorPlanetLine.EST_VALUE, "2400000000");
+		eros.put(MinorPlanetLine.COMPOSITION, "aluminum, gold, platinum");
+		eros.setUpRelativeSize();
 		
+		
+		Asteroid _1986_DA = (Asteroid) asteroids.get("1986 DA");
+		_1986_DA.put(MinorPlanetLine.EST_DIAM, "2.2");
+		_1986_DA.put(MinorPlanetLine.EST_VALUE, "5000000");
+		_1986_DA.put(MinorPlanetLine.COMPOSITION, "gold, platinum, iron");
+		_1986_DA.setUpRelativeSize();
+		
+		// And then... add a comet!
+		HashMap halebopp = new HashMap();
+		halebopp.put(MinorPlanetLine.NAME, "C1995 O1 Hale-Bopp");
+		halebopp.put(MinorPlanetLine.ECCENTRICITY, "0.995038361");
+		halebopp.put(MinorPlanetLine.ASCENDING_NODE, "282.4709323");
+		halebopp.put(MinorPlanetLine.PERIHELION, "130.5943673");
+		halebopp.put(MinorPlanetLine.INCLINATION, "89.4283468");
+		halebopp.put(MinorPlanetLine.SEMI_MAJOR_AXIS, "186");
+		halebopp.put(MinorPlanetLine.OBJECT_TYPE, MinorPlanetLine.COMET);
+		halebopp.put(MinorPlanetLine.EST_DIAM, "40");
+		Asteroid comet = new Asteroid(halebopp);
+		comet.setUpRelativeSize();
+		comet.makeComet();
+		asteroids.put(comet.getName(), comet);
 		return asteroids;
 	}
 
