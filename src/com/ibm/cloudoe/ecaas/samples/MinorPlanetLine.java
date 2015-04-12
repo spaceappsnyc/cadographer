@@ -118,6 +118,8 @@ public class MinorPlanetLine {
 	  public static final Object ASTEROID = "Asteroid";
 	  public static final Object OBJECT_TYPE = "objectType";
 	public static final Object REL_SIZE = "relSize";
+	public static final Object PALERMO_SCALE_CUM = "palermoScaleCum";
+	public static final Object DISTANCE = "distance";
 	
 	  @Field(offset = 92, length = 13, align = Align.RIGHT)
 	  public String getSemiMajorAxis() {

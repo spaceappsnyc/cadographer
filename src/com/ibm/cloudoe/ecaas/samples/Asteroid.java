@@ -59,5 +59,18 @@ public class Asteroid extends JSONObject{
 		
 	}
 
+	public void setUpDistance() {
+		String str = (String)this.get(MinorPlanetLine.PALERMO_SCALE_CUM);
+		
+		if (str != null)
+		{
+			
+			
+			this.put(MinorPlanetLine.DISTANCE, "0");
+				
+		}
+		
+	}
+
 	
 }

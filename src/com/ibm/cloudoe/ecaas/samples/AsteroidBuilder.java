@@ -80,7 +80,7 @@ public class AsteroidBuilder {
 			values.put("impactProb", data[3]);
 			values.put("vKmPerSec", data[4]);
 			values.put(MinorPlanetLine.EST_DIAM, data[6]);
-			values.put("palermoScaleCum", data[7]);
+			values.put(MinorPlanetLine.PALERMO_SCALE_CUM, data[7]);
 			values.put("palermoScaleMax", data[8]);
 			values.put("torinoScale", data[9]);
 
@@ -109,6 +109,7 @@ public class AsteroidBuilder {
 				asteroid.putAll(extraValues);	
 			}
 			asteroid.setUpRelativeSize();
+			asteroid.setUpDistance();
 		}
 		
 		// Enrich a couple special ones
