@@ -2,9 +2,9 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.VTKLoader = function ( manager ) {
+THREE.VTKLoader = function () {
 
-	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+	THREE.EventTarget.call( this );
 
 };
 
@@ -12,24 +12,65 @@ THREE.VTKLoader.prototype = {
 
 	constructor: THREE.VTKLoader,
 
-	load: function ( url, onLoad, onProgress, onError ) {
+	load: function ( url, callback ) {
 
 		var scope = this;
+		var request = new XMLHttpRequest();
 
-		var loader = new THREE.XHRLoader( scope.manager );
-		loader.setCrossOrigin( this.crossOrigin );
-		loader.load( url, function ( text ) {
+		request.addEventListener( 'load', function ( event ) {
 
-			onLoad( scope.parse( text ) );
+			scope.dispatchEvent( { type: 'load', content: scope.parse( event.target.responseText ) } );
 
-		}, onProgress, onError );
+		}, false );
+
+		request.addEventListener( 'progress', function ( event ) {
+
+			scope.dispatchEvent( { type: 'progress', loaded: event.loaded, total: event.total } );
+
+		}, false );
+
+		request.addEventListener( 'error', function () {
+
+			scope.dispatchEvent( { type: 'error', message: 'Couldn\'t load URL [' + url + ']' } );
+
+		}, false );
+
+		if ( callback ) {
+
+			scope.addEventListener( 'load', function ( event ) {
+
+				callback( event.content );
+
+			} );
+
+		}
+
+		request.open( 'GET', url, true );
+		request.send( null );
 
 	},
 
 	parse: function ( data ) {
 
-		var indices = [];
-		var positions = [];
+		var geometry = new THREE.Geometry();
+
+		function vertex( x, y, z ) {
+
+			geometry.vertices.push( new THREE.Vector3( x, y, z ) );
+
+		}
+
+		function face3( a, b, c ) {
+
+			geometry.faces.push( new THREE.Face3( a, b, c ) );
+
+		}
+
+		function face4( a, b, c, d ) {
+
+			geometry.faces.push( new THREE.Face4( a, b, c, d ) );
+
+		}
 
 		var pattern, result;
 
@@ -37,11 +78,11 @@ THREE.VTKLoader.prototype = {
 
 		pattern = /([\+|\-]?[\d]+[\.][\d|\-|e]+)[ ]+([\+|\-]?[\d]+[\.][\d|\-|e]+)[ ]+([\+|\-]?[\d]+[\.][\d|\-|e]+)/g;
 
-		while ( ( result = pattern.exec( data ) ) !== null ) {
+		while ( ( result = pattern.exec( data ) ) != null ) {
 
 			// ["1.0 2.0 3.0", "1.0", "2.0", "3.0"]
 
-			positions.push( parseFloat( result[ 1 ] ), parseFloat( result[ 2 ] ), parseFloat( result[ 3 ] ) );
+			vertex( parseFloat( result[ 1 ] ), parseFloat( result[ 2 ] ), parseFloat( result[ 3 ] ) );
 
 		}
 
@@ -49,11 +90,11 @@ THREE.VTKLoader.prototype = {
 
 		pattern = /3[ ]+([\d]+)[ ]+([\d]+)[ ]+([\d]+)/g;
 
-		while ( ( result = pattern.exec( data ) ) !== null ) {
+		while ( ( result = pattern.exec( data ) ) != null ) {
 
 			// ["3 1 2 3", "1", "2", "3"]
 
-			indices.push( parseInt( result[ 1 ] ), parseInt( result[ 2 ] ), parseInt( result[ 3 ] ) );
+			face3( parseInt( result[ 1 ] ), parseInt( result[ 2 ] ), parseInt( result[ 3 ] ) );
 
 		}
 
@@ -61,23 +102,21 @@ THREE.VTKLoader.prototype = {
 
 		pattern = /4[ ]+([\d]+)[ ]+([\d]+)[ ]+([\d]+)[ ]+([\d]+)/g;
 
-		while ( ( result = pattern.exec( data ) ) !== null ) {
+		while ( ( result = pattern.exec( data ) ) != null ) {
 
 			// ["4 1 2 3 4", "1", "2", "3", "4"]
 
-			indices.push( parseInt( result[ 1 ] ), parseInt( result[ 2 ] ), parseInt( result[ 4 ] ) );
-			indices.push( parseInt( result[ 2 ] ), parseInt( result[ 3 ] ), parseInt( result[ 4 ] ) );
+			face4( parseInt( result[ 1 ] ), parseInt( result[ 2 ] ), parseInt( result[ 3 ] ), parseInt( result[ 4 ] ) );
 
 		}
 
-		var geometry = new THREE.BufferGeometry();
-		geometry.addAttribute( 'index', new THREE.BufferAttribute( new ( indices.length > 65535 ? Uint32Array : Uint16Array )( indices ), 1 ) );
-		geometry.addAttribute( 'position', new THREE.BufferAttribute( new Float32Array( positions ), 3 ) );
+		geometry.computeCentroids();
+		geometry.computeFaceNormals();
+		geometry.computeVertexNormals();
+		geometry.computeBoundingSphere();
 
 		return geometry;
 
 	}
 
-};
-
-THREE.EventDispatcher.prototype.apply( THREE.VTKLoader.prototype );
+}

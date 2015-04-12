@@ -73,8 +73,6 @@ Globe.prototype.buildSatellites = function () {
 // It's an array of function to be executed for animation
 //
 Globe.prototype.fuseAnimationWithObject = function () {
-	var self = this;
-
 	// Self rotation
 	this.animation_functions.push(_.bind(function () {
 		this.planet.rotation.y += 1 / this.rotation_time;
@@ -96,7 +94,7 @@ Globe.prototype.fuseAnimationWithObject = function () {
 Globe.prototype.drawRevolutionCircle = function () {
 	var circle = new THREE.Shape();
 	circle.moveTo(this.x, 0);
-	circle.absarc(0, 0, this.x, 0, Math.PI * 2, false);
+	circle.absellipse(0, 0, this.x, this.x * 2, 0, Math.PI * 2, false);
 	// var circle = new THREE.EllipseCurve(0, 0, this.x, this.x * 2, 0, Math.PI * 2, false);
 
 	var points = circle.createPointsGeometry(100);
@@ -112,14 +110,14 @@ Globe.prototype.drawRevolutionCircle = function () {
 }
 
 Globe.prototype.drawGlobe = function () {
-		var geometry = new THREE.SphereGeometry(this.radius, 16, 16);
-		var material = new THREE.MeshBasicMaterial({
-			color: 0x91FFFE,
-			wireframe: true
-		});
+	var geometry = new THREE.SphereGeometry(this.radius, 16, 16);
+	var material = new THREE.MeshBasicMaterial({
+		color: 0x91FFFE,
+		wireframe: true
+	});
 
-		this.planet = new THREE.Mesh(geometry, material);
-		this.axis_two.add(this.planet);
+	this.planet = new THREE.Mesh(geometry, material);
+	this.axis_two.add(this.planet);
 }
 
 Globe.prototype.projectDraw = function() {

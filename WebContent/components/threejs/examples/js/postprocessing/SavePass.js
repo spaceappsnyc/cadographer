@@ -34,13 +34,6 @@ THREE.SavePass = function ( renderTarget ) {
 	this.needsSwap = false;
 	this.clear = false;
 
-
-	this.camera = new THREE.OrthographicCamera( -1, 1, 1, -1, 0, 1 );
-	this.scene  = new THREE.Scene();
-
-	this.quad = new THREE.Mesh( new THREE.PlaneBufferGeometry( 2, 2 ), null );
-	this.scene.add( this.quad );
-
 };
 
 THREE.SavePass.prototype = {
@@ -53,9 +46,9 @@ THREE.SavePass.prototype = {
 
 		}
 
-		this.quad.material = this.material;
+		THREE.EffectComposer.quad.material = this.material;
 
-		renderer.render( this.scene, this.camera, this.renderTarget, this.clear );
+		renderer.render( THREE.EffectComposer.scene, THREE.EffectComposer.camera, this.renderTarget, this.clear );
 
 	}
 

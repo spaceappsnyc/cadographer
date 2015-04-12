@@ -48,9 +48,9 @@ THREE.ParametricGeometries = {
 		var x, y, z;
 
 		var a = 2;
-		x = Math.cos(v) * (a + u * Math.cos(v / 2));
-		y = Math.sin(v) * (a + u * Math.cos(v / 2));
-		z = u * Math.sin(v / 2);
+		x = Math.cos(v) * (a + u * Math.cos(v/2));
+		y = Math.sin(v) * (a + u * Math.cos(v/2));
+		z = u * Math.sin(v/2);
 		return new THREE.Vector3(x, y, z);
 
 	},
@@ -108,9 +108,9 @@ THREE.ParametricGeometries.TubeGeometry = function(path, segments, radius, segme
 		binormals = frames.binormals;
 
 		// proxy internals
-	this.tangents = tangents;
-	this.normals = normals;
-	this.binormals = binormals;
+		this.tangents = tangents;
+		this.normals = normals;
+		this.binormals = binormals;
 
 
 
@@ -150,7 +150,6 @@ THREE.ParametricGeometries.TubeGeometry = function(path, segments, radius, segme
 };
 
 THREE.ParametricGeometries.TubeGeometry.prototype = Object.create( THREE.Geometry.prototype );
-THREE.ParametricGeometries.TubeGeometry.prototype.constructor = THREE.ParametricGeometries.TubeGeometry;
 
 
  /*********************************************
@@ -201,7 +200,6 @@ THREE.ParametricGeometries.TorusKnotGeometry = function ( radius, tube, segments
 };
 
 THREE.ParametricGeometries.TorusKnotGeometry.prototype = Object.create( THREE.Geometry.prototype );
-THREE.ParametricGeometries.TorusKnotGeometry.prototype.constructor = THREE.ParametricGeometries.TorusKnotGeometry;
 
 
  /*********************************************
@@ -228,7 +226,6 @@ THREE.ParametricGeometries.SphereGeometry = function(size, u, v) {
 };
 
 THREE.ParametricGeometries.SphereGeometry.prototype = Object.create( THREE.Geometry.prototype );
-THREE.ParametricGeometries.SphereGeometry.prototype.constructor = THREE.ParametricGeometries.SphereGeometry;
 
 
  /*********************************************
@@ -253,4 +250,3 @@ THREE.ParametricGeometries.PlaneGeometry = function(width, depth, segmentsWidth,
 };
 
 THREE.ParametricGeometries.PlaneGeometry.prototype = Object.create( THREE.Geometry.prototype );
-THREE.ParametricGeometries.PlaneGeometry.prototype.constructor = THREE.ParametricGeometries.PlaneGeometry;

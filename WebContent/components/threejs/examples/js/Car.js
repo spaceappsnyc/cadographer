@@ -195,7 +195,7 @@ THREE.Car = function () {
 
 		var forwardDelta = this.speed * delta;
 
-		this.carOrientation += ( forwardDelta * this.STEERING_RADIUS_RATIO ) * this.wheelOrientation;
+		this.carOrientation += ( forwardDelta * this.STEERING_RADIUS_RATIO )* this.wheelOrientation;
 
 		// displacement
 
@@ -269,12 +269,12 @@ THREE.Car = function () {
 
 				var bb = scope.wheelGeometry.boundingBox;
 
-				scope.wheelOffset.addVectors( bb.min, bb.max );
+				scope.wheelOffset.add( bb.min, bb.max );
 				scope.wheelOffset.multiplyScalar( 0.5 );
 
 				scope.wheelDiameter = bb.max.y - bb.min.y;
 
-				scope.wheelGeometry.center();
+				THREE.GeometryUtils.center( scope.wheelGeometry );
 
 			}
 
@@ -295,9 +295,9 @@ THREE.Car = function () {
 
 			// front left wheel
 
-			delta.multiplyVectors( scope.wheelOffset, new THREE.Vector3( s, s, s ) );
+			delta.multiply( scope.wheelOffset, new THREE.Vector3( s, s, s ) );
 
-			scope.frontLeftWheelRoot.position.add( delta );
+			scope.frontLeftWheelRoot.position.addSelf( delta );
 
 			scope.frontLeftWheelMesh = new THREE.Mesh( scope.wheelGeometry, wheelFaceMaterial );
 			scope.frontLeftWheelMesh.scale.set( s, s, s );
@@ -307,9 +307,9 @@ THREE.Car = function () {
 
 			// front right wheel
 
-			delta.multiplyVectors( scope.wheelOffset, new THREE.Vector3( -s, s, s ) );
+			delta.multiply( scope.wheelOffset, new THREE.Vector3( -s, s, s ) );
 
-			scope.frontRightWheelRoot.position.add( delta );
+			scope.frontRightWheelRoot.position.addSelf( delta );
 
 			scope.frontRightWheelMesh = new THREE.Mesh( scope.wheelGeometry, wheelFaceMaterial );
 
@@ -321,24 +321,24 @@ THREE.Car = function () {
 
 			// back left wheel
 
-			delta.multiplyVectors( scope.wheelOffset, new THREE.Vector3( s, s, -s ) );
+			delta.multiply( scope.wheelOffset, new THREE.Vector3( s, s, -s ) );
 			delta.z -= scope.backWheelOffset;
 
 			scope.backLeftWheelMesh = new THREE.Mesh( scope.wheelGeometry, wheelFaceMaterial );
 
-			scope.backLeftWheelMesh.position.add( delta );
+			scope.backLeftWheelMesh.position.addSelf( delta );
 			scope.backLeftWheelMesh.scale.set( s, s, s );
 
 			scope.root.add( scope.backLeftWheelMesh );
 
 			// back right wheel
 
-			delta.multiplyVectors( scope.wheelOffset, new THREE.Vector3( -s, s, -s ) );
+			delta.multiply( scope.wheelOffset, new THREE.Vector3( -s, s, -s ) );
 			delta.z -= scope.backWheelOffset;
 
 			scope.backRightWheelMesh = new THREE.Mesh( scope.wheelGeometry, wheelFaceMaterial );
 
-			scope.backRightWheelMesh.position.add( delta );
+			scope.backRightWheelMesh.position.addSelf( delta );
 			scope.backRightWheelMesh.scale.set( s, s, s );
 			scope.backRightWheelMesh.rotation.z = Math.PI;
 
@@ -363,8 +363,8 @@ THREE.Car = function () {
 	};
 
 	function quadraticEaseOut( k ) { return - k * ( k - 2 ); }
-	function cubicEaseOut( k ) { return -- k * k * k + 1; }
-	function circularEaseOut( k ) { return Math.sqrt( 1 - -- k * k ); }
+	function cubicEaseOut( k ) { return --k * k * k + 1; }
+	function circularEaseOut( k ) { return Math.sqrt( 1 - --k * k ); }
 	function sinusoidalEaseOut( k ) { return Math.sin( k * Math.PI / 2 ); }
 	function exponentialEaseOut( k ) { return k === 1 ? 1 : - Math.pow( 2, - 10 * k ) + 1; }
 

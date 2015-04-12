@@ -10,7 +10,6 @@ THREE.ShaderPass = function ( shader, textureID ) {
 
 	this.material = new THREE.ShaderMaterial( {
 
-        	defines: shader.defines || {},
 		uniforms: this.uniforms,
 		vertexShader: shader.vertexShader,
 		fragmentShader: shader.fragmentShader
@@ -22,13 +21,6 @@ THREE.ShaderPass = function ( shader, textureID ) {
 	this.enabled = true;
 	this.needsSwap = true;
 	this.clear = false;
-
-
-	this.camera = new THREE.OrthographicCamera( -1, 1, 1, -1, 0, 1 );
-	this.scene  = new THREE.Scene();
-
-	this.quad = new THREE.Mesh( new THREE.PlaneBufferGeometry( 2, 2 ), null );
-	this.scene.add( this.quad );
 
 };
 
@@ -42,15 +34,15 @@ THREE.ShaderPass.prototype = {
 
 		}
 
-		this.quad.material = this.material;
+		THREE.EffectComposer.quad.material = this.material;
 
 		if ( this.renderToScreen ) {
 
-			renderer.render( this.scene, this.camera );
+			renderer.render( THREE.EffectComposer.scene, THREE.EffectComposer.camera );
 
 		} else {
 
-			renderer.render( this.scene, this.camera, writeBuffer, this.clear );
+			renderer.render( THREE.EffectComposer.scene, THREE.EffectComposer.camera, writeBuffer, this.clear );
 
 		}
 

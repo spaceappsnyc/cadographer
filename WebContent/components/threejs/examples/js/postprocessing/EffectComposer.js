@@ -6,20 +6,19 @@ THREE.EffectComposer = function ( renderer, renderTarget ) {
 
 	this.renderer = renderer;
 
-	if ( renderTarget === undefined ) {
+	this.renderTarget1 = renderTarget;
 
-		var pixelRatio = renderer.getPixelRatio();
+	if ( this.renderTarget1 === undefined ) {
 
-		var width  = Math.floor( renderer.context.canvas.width  / pixelRatio ) || 1;
-		var height = Math.floor( renderer.context.canvas.height / pixelRatio ) || 1;
-		var parameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false };
+		var width = window.innerWidth || 1;
+		var height = window.innerHeight || 1;
 
-		renderTarget = new THREE.WebGLRenderTarget( width, height, parameters );
+		this.renderTargetParameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false };
+		this.renderTarget1 = new THREE.WebGLRenderTarget( width, height, this.renderTargetParameters );
 
 	}
 
-	this.renderTarget1 = renderTarget;
-	this.renderTarget2 = renderTarget.clone();
+	this.renderTarget2 = this.renderTarget1.clone();
 
 	this.writeBuffer = this.renderTarget1;
 	this.readBuffer = this.renderTarget2;
@@ -46,12 +45,6 @@ THREE.EffectComposer.prototype = {
 	addPass: function ( pass ) {
 
 		this.passes.push( pass );
-
-	},
-
-	insertPass: function ( pass, index ) {
-
-		this.passes.splice( index, 0, pass );
 
 	},
 
@@ -106,34 +99,28 @@ THREE.EffectComposer.prototype = {
 
 	reset: function ( renderTarget ) {
 
-		if ( renderTarget === undefined ) {
+		this.renderTarget1 = renderTarget;
 
-			renderTarget = this.renderTarget1.clone();
+		if ( this.renderTarget1 === undefined ) {
 
-			var pixelRatio = this.renderer.getPixelRatio();
-
-			renderTarget.width  = Math.floor( this.renderer.context.canvas.width  / pixelRatio );
-			renderTarget.height = Math.floor( this.renderer.context.canvas.height / pixelRatio );
+			this.renderTarget1 = new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight, this.renderTargetParameters );
 
 		}
 
-		this.renderTarget1 = renderTarget;
-		this.renderTarget2 = renderTarget.clone();
+		this.renderTarget2 = this.renderTarget1.clone();
 
 		this.writeBuffer = this.renderTarget1;
 		this.readBuffer = this.renderTarget2;
 
-	},
-
-	setSize: function ( width, height ) {
-
-		var renderTarget = this.renderTarget1.clone();
-
-		renderTarget.width = width;
-		renderTarget.height = height;
-
-		this.reset( renderTarget );
-
 	}
 
 };
+
+// shared ortho camera
+
+THREE.EffectComposer.camera = new THREE.OrthographicCamera( -1, 1, 1, -1, 0, 1 );
+
+THREE.EffectComposer.quad = new THREE.Mesh( new THREE.PlaneGeometry( 2, 2 ), null );
+
+THREE.EffectComposer.scene = new THREE.Scene();
+THREE.EffectComposer.scene.add( THREE.EffectComposer.quad );

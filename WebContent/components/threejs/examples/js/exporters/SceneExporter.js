@@ -8,7 +8,7 @@ THREE.SceneExporter.prototype = {
 
 	constructor: THREE.SceneExporter,
 
-	parse: function ( scene ) {
+	parse: function ( scene, clearColor, clearAlpha ) {
 
 		var position = Vector3String( scene.position );
 		var rotation = Vector3String( scene.rotation );
@@ -143,7 +143,7 @@ THREE.SceneExporter.prototype = {
 
 		scene.traverse( function ( node ) {
 
-			if ( node instanceof THREE.Camera && node.userData.active ) {
+			if ( node instanceof THREE.Camera && node.properties.active ) {
 
 				activeCamera = node;
 
@@ -151,6 +151,8 @@ THREE.SceneExporter.prototype = {
 
 		} );
 
+		var bgcolor = ColorString( clearColor );
+		var bgalpha = clearAlpha;
 		var defcamera = LabelString( activeCamera ? getObjectName( activeCamera ) : "" );
 		var deffog = LabelString( scene.fog ? getFogName( scene.fog ) : "" );
 
@@ -182,7 +184,7 @@ THREE.SceneExporter.prototype = {
 
 		function NumConstantString( c ) {
 
-			var constants = [ "NearestFilter", "NearestMipMapNearestFilter", "NearestMipMapLinearFilter",
+			var constants = [ "NearestFilter", "NearestMipMapNearestFilter" , "NearestMipMapLinearFilter",
 							  "LinearFilter", "LinearMipMapNearestFilter", "LinearMipMapLinearFilter" ];
 
 			for ( var i = 0; i < constants.length; i ++ ) {
@@ -238,12 +240,11 @@ THREE.SceneExporter.prototype = {
 				var output = [
 
 				'\t\t' + LabelString( getObjectName( o ) ) + ' : {',
-				'	"type"           : "PointLight",',
-				'	"color"          : ' + o.color.getHex() + ',',
-				'	"intensity"      : ' + o.intensity + ',',
-				'	"position"       : ' + Vector3String( o.position ) + ',',
-				'	"decay"          : ' + o.decay + ',',
-				'	"distance"       : ' + o.distance + ( o.children.length ? ',' : '' )
+				'	"type"      : "PointLight",',
+				'	"color"     : ' + o.color.getHex() + ',',
+				'	"intensity" : ' + o.intensity + ',',
+				'	"position"  : ' + Vector3String( o.position ) + ',',
+				'	"distance"  : ' + o.distance + ( o.children.length ? ',' : '' )
 
 				];
 
@@ -252,15 +253,14 @@ THREE.SceneExporter.prototype = {
 				var output = [
 
 				'\t\t' + LabelString( getObjectName( o ) ) + ' : {',
-				'	"type"           : "SpotLight",',
-				'	"color"          : ' + o.color.getHex() + ',',
-				'	"intensity"      : ' + o.intensity + ',',
-				'	"position"       : ' + Vector3String( o.position ) + ',',
-				'	"distance"       : ' + o.distance + ',',
-				'	"angle"          : ' + o.angle + ',',
-				'	"exponent"       : ' + o.exponent + ',',
-				'	"decay"          : ' + o.decay + ',',
-				'	"target"         : ' + LabelString( getObjectName( o.target ) ) + ( o.children.length ? ',' : '' )
+				'	"type"      : "SpotLight",',
+				'	"color"     : ' + o.color.getHex() + ',',
+				'	"intensity" : ' + o.intensity + ',',
+				'	"position"  : ' + Vector3String( o.position ) + ',',
+				'	"distance"  : ' + o.distance + ',',
+				'	"angle"     : ' + o.angle + ',',
+				'	"exponent"  : ' + o.exponent + ',',
+				'	"target"    : ' + LabelString( getObjectName( o.target ) ) + ( o.children.length ? ',' : '' )
 
 				];
 
@@ -373,22 +373,22 @@ THREE.SceneExporter.prototype = {
 
 				'\t' + LabelString( getGeometryName( g ) ) + ': {',
 				'	"type"    : "sphere",',
-				'	"radius"  : ' 		 + g.parameters.radius + ',',
-				'	"widthSegments"  : ' + g.parameters.widthSegments + ',',
-				'	"heightSegments" : ' + g.parameters.heightSegments,
+				'	"radius"  : ' 		 + g.radius + ',',
+				'	"widthSegments"  : ' + g.widthSegments + ',',
+				'	"heightSegments" : ' + g.heightSegments,
 				'}'
 
 				];
 
-			} else if ( g instanceof THREE.BoxGeometry ) {
+			} else if ( g instanceof THREE.CubeGeometry ) {
 
 				var output = [
 
 				'\t' + LabelString( getGeometryName( g ) ) + ': {',
 				'	"type"    : "cube",',
-				'	"width"  : '  + g.parameters.width  + ',',
-				'	"height"  : ' + g.parameters.height + ',',
-				'	"depth"  : '  + g.parameters.depth  + ',',
+				'	"width"  : '  + g.width  + ',',
+				'	"height"  : ' + g.height + ',',
+				'	"depth"  : '  + g.depth  + ',',
 				'	"widthSegments"  : ' + g.widthSegments + ',',
 				'	"heightSegments" : ' + g.heightSegments + ',',
 				'	"depthSegments" : '  + g.depthSegments,
@@ -474,6 +474,7 @@ THREE.SceneExporter.prototype = {
 				'	"type"    : "MeshLambertMaterial",',
 				'	"parameters"  : {',
 				'		"color"  : ' 	+ m.color.getHex() + ',',
+				'		"ambient"  : ' 	+ m.ambient.getHex() + ',',
 				'		"emissive"  : ' + m.emissive.getHex() + ',',
 
 				m.map ? 		'		"map" : ' + LabelString( getTextureName( m.map ) ) + ',' : '',
@@ -499,6 +500,7 @@ THREE.SceneExporter.prototype = {
 				'	"type"    : "MeshPhongMaterial",',
 				'	"parameters"  : {',
 				'		"color"  : ' 	+ m.color.getHex() + ',',
+				'		"ambient"  : ' 	+ m.ambient.getHex() + ',',
 				'		"emissive"  : ' + m.emissive.getHex() + ',',
 				'		"specular"  : ' + m.specular.getHex() + ',',
 				'		"shininess" : ' + m.shininess + ',',
@@ -741,13 +743,15 @@ THREE.SceneExporter.prototype = {
 			'',
 			'	"defaults" :',
 			'	{',
+			'		"bgcolor" : ' + bgcolor + ',',
+			'		"bgalpha" : ' + bgalpha + ',',
 			'		"camera"  : ' + defcamera + ',',
 			'		"fog"  	  : ' + deffog,
 			'	}',
 			'}'
 		].join( '\n' );
 
-		return JSON.parse( output );
+		return output;
 
 	}
 
