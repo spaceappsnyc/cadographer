@@ -94,8 +94,8 @@ Globe.prototype.fuseAnimationWithObject = function () {
 Globe.prototype.drawRevolutionCircle = function () {
 	var circle = new THREE.Shape();
 	circle.moveTo(this.x, 0);
-	circle.absellipse(0, 0, this.x, this.x * 2, 0, Math.PI * 2, false);
-	// var circle = new THREE.EllipseCurve(0, 0, this.x, this.x * 2, 0, Math.PI * 2, false);
+	circle.absarc(0, 0, this.x, 0, Math.PI * 2, false);
+	// circle.absellipse(0, 0, this.x, this.x * 2, 0, Math.PI * 2, false);
 
 	var points = circle.createPointsGeometry(100);
 	v_circle = new THREE.Line(points, new THREE.LineBasicMaterial({
@@ -120,72 +120,57 @@ Globe.prototype.drawGlobe = function () {
 	this.axis_two.add(this.planet);
 }
 
-Globe.prototype.projectDraw = function() {
-		var self = this;
-		var geometry2 = new THREE.Geometry();
-		geometry2.vertices.push(new THREE.Vector3(0, 0, 0));
-		geometry2.vertices.push(new THREE.Vector3(0, -self.y, 0));
+Globe.prototype.projectDraw = function () {
+	var geometry2 = new THREE.Geometry();
+	geometry2.vertices.push(new THREE.Vector3(0, 0, 0));
+	geometry2.vertices.push(new THREE.Vector3(0, -this.y, 0));
 
-		var line2 = new THREE.Line(geometry2, new THREE.LineBasicMaterial({
-				color: 0xeeeeee,
-	opacity: 0.3
-		}));
+	var line2 = new THREE.Line(geometry2, new THREE.LineBasicMaterial({
+		color: 0xeeeeee,
+		opacity: 0.3
+	}));
 
-		var tmp_sphere = new THREE.Shape();
-		tmp_sphere.moveTo(200, 0 );
-		tmp_sphere.absarc(0,
-					0,
-					200,
-					0,
-					Math.PI*2,
-					false);
+	var tmp_sphere = new THREE.Shape();
+	tmp_sphere.moveTo(200, 0 );
+	tmp_sphere.absarc(0, 0, 200, 0, Math.PI * 2, false);
 
-		var points = tmp_sphere.createPointsGeometry(100);
-		var circle = new THREE.Line(points,
-				 new THREE.LineBasicMaterial({
-						 color: 0xeeeeee,
-						 opacity: 0.2,
-						 linewidth: 1
-				 }));
+	var points = tmp_sphere.createPointsGeometry(100);
+	var circle = new THREE.Line(points, new THREE.LineBasicMaterial({
+		color: 0xeeeeee,
+		opacity: 0.2,
+		linewidth: 1
+	}));
 
-		circle.rotation.set(Math.PI/2, 0, 0);
-		circle.position.set(0, -self.y, 0);
+	circle.rotation.set(Math.PI/2, 0, 0);
+	circle.position.set(0, -this.y, 0);
 
-		self.axis_two.add(circle);
-		this.axis_two.add(line2);
+	this.axis_two.add(circle);
+	this.axis_two.add(line2);
 }
 
-Globe.prototype.propagation = function() {
-		var self = this;
-		var prop = self.propagation_struct;
+Globe.prototype.propagation = function () {
+	var prop = this.propagation_struct;
 
+	if (prop.current_radius > prop.max || prop.current_radius == 0) {
+		prop.current_radius = prop.min;
+	} else {
+		prop.current_radius += prop.speed;
+	}
 
-		if (prop.current_radius > prop.max || prop.current_radius == 0)
-	prop.current_radius = prop.min;
-		else
-	prop.current_radius += prop.speed;
+	this.axis_two.remove(prop.circle);
 
+	var tmp_sphere = new THREE.Shape();
+	tmp_sphere.moveTo(prop.current_radius, 0 );
+	// tmp_sphere.absellipse(0, 0, prop.current_radius, prop.current_radius * 2, 0, Math.PI * 2, false);
+	tmp_sphere.absarc(0, 0, prop.current_radius, 0, Math.PI*2, false);
 
-		self.axis_two.remove(prop.circle);
+	var points = tmp_sphere.createPointsGeometry(100);
+	prop.circle = new THREE.Line(points, new THREE.LineBasicMaterial({
+		color: 0xeeeeee,
+		opacity: 0.8 - (prop.current_radius / (prop.max - prop.min)),
+		linewidth: 1
+	}));
 
-		var tmp_sphere = new THREE.Shape();
-		tmp_sphere.moveTo(prop.current_radius, 0 );
-		tmp_sphere.absarc(0,
-					0,
-					prop.current_radius,
-					0,
-					Math.PI*2,
-					false);
-
-		var points = tmp_sphere.createPointsGeometry(100);
-		prop.circle = new THREE.Line(points,
-				 new THREE.LineBasicMaterial({
-						 color: 0xeeeeee,
-						 opacity: 0.8 - (prop.current_radius / (prop.max - prop.min)),
-						 linewidth: 1
-				 }));
-
-
-		prop.circle.rotation.set(Math.PI/2, 0, 0);
-		self.axis_two.add(prop.circle);
+	prop.circle.rotation.set(Math.PI/2, 0, 0);
+	this.axis_two.add(prop.circle);
 }
