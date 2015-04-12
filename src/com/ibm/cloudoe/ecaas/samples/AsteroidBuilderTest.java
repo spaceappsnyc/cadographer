@@ -12,7 +12,7 @@ public class AsteroidBuilderTest {
 		AsteroidBuilder builder = new AsteroidBuilder();
 		HashMap asteroids = builder.buildWith(AsteroidServlet.DATA_SOURCE);
 		
-		System.out.println(asteroids.get("Eros"));
+		System.out.println(asteroids.get("2012 FN"));
 	}
 
 	

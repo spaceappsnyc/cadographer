@@ -21,5 +21,14 @@ public class Asteroid extends JSONObject{
 		// TODO Auto-generated method stub
 		return _record.getName().trim();
 	}
+
+	public void setSizeKey() {
+		String strDiam = (String)this.get("estDiam");
+		
+		//if(not)
+		
+		//this.put(sizeRange, arg1);
+		
+	}
 	
 }
