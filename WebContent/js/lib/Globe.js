@@ -16,7 +16,7 @@ function Globe(globe) {
 	}
 
 	globe.coordinates = (globe.coordinates ? globe.coordinates: [0, 0, 0]);
-	this.x = globe.type === 'Moon' ? globe.coordinates[0] / 10000 + globe.parent.radius : globe.coordinates[0] / 10000;
+	this.x = globe.type === 'Moon' ? globe.coordinates[0] * 10000 + globe.parent.radius : globe.coordinates[0] * 10000;
 	this.y = globe.coordinates[1];
 	this.z = globe.coordinates[2];
 	this.axis_two.position.set(this.x, 0, this.z);

@@ -30,41 +30,30 @@
 			</div>
 		</div>
 
-		<!-- Sidebar -->
-		<div id="sidebar">
-			<ul>
-				<li>Sort by:</li>
-				<li>Type:
-					<ul>
-						<li>Asteroids</li>
-						<li>Comets</li>
-					</ul>
-				</li>
-				<li class="active">Impact</li>
-				<li>Size</li>
-				<li>Distance</li>
-				<li>Composition
-					<ul>
-						<li>Ice</li>
-						<li>Water</li>
-						<li>Unknown</li>
-					</ul>
-				</li>
-				<li>Value</li>
-			</ul>
+		<div id="infoContainer">
+			<div id="mission">
+				<h2>Mission</h2>
+				<p>
+					Cadographer is an informative App that 3D-maps known asteroids and comets’ orbits in the Solar System. It informs the general public about the NEO’s with potential danger to Earth and it also shows resourcing opportunities. Further actions for motivated citizen scientist are suggested following the NASA’s Asteroid Grand Challenge.<br>
+					<a style="text-align: center; color: #1abc9c;" href="http://www.topcoder.com/asteroids/" target="_blank">_______</a>
+				</p>
+			</div>
+			<div id="mission">
+				<h2>The Grand Challenge</h2>
+				<p>
+					Be a citizen scientist with NASA and help mapping the asteroids! NASA has built an application to hunt for new asteroids. The App is designed to help the public identifying possible new NEO’s and submitting them to be added to the list. Click here to download the Asteroid Data Hunter App!<br>
+					<a style="text-align: center;color:#1abc9c;" href="http://www.topcoder.com/asteroids/" target="_blank">Asteroid Grand Challenge ></a>
+				</p>
+			</div>
+      <div id="asteroid-info">
+        <h2>Find an Asteroid!</h2>
+				<input type="text" id="asteroid-name" placeholder="Asteroid Name (eg. 2014 DG)" />
+				<div class="info"></div>
+			</div>
 		</div>
 
-		<div id="container"></div>
-
 		<script src="components/jquery/dist/jquery.min.js"></script>
-		<script src="components/threejs/build/three.min.js"></script>
-		<script src="components/threex.planets/threex.planets.js"></script>
 		<script src="components/underscore/underscore-min.js"></script>
-		<script src="js/lib/TrackballControls.js"></script>
-		<script src="js/lib/Detector.js"></script>
-		<script src="js/lib/Tools.js"></script>
-		<script src="js/lib/Globe.js"></script>
-		<script src="js/lib/System.js"></script>
-		<script src="js/main.js"></script>
+		<script src="js/info.js"></script>
 	</body>
 </html>

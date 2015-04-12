@@ -9,6 +9,7 @@
   "dependencies": {
     "jquery": "~2.1.3",
     "threejs": "r53",
-    "underscore": "~1.4.2"
+    "underscore": "~1.4.2",
+    "threex.planets": "*"
   }
 }
