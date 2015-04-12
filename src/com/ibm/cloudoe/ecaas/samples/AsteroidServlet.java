@@ -60,8 +60,17 @@ public class AsteroidServlet extends HttpServlet {
 			
 			makeAsteroids();
 			
-			JSONArtifact json = shipAsteroids();
 			
+			JSONArtifact json = null;
+			
+			if (key!=null){
+				 json = (JSONArtifact)_asteroids.get(key);
+			} else
+			{
+				 json = shipAsteroids();
+			}
+
+
 			response.getWriter().write(json.serialize());
 			
 			//

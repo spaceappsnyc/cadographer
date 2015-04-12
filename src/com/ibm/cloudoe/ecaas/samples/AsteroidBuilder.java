@@ -47,6 +47,7 @@ public class AsteroidBuilder {
 		    
 		    Asteroid theAsteroid = new Asteroid(record);
 		    
+		    
 		    asteroids.put(theAsteroid.getName(), theAsteroid);
 		}
 		
