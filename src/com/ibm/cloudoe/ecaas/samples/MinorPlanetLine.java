@@ -87,6 +87,33 @@ public class MinorPlanetLine {
 	  public void setInclination(String str) {
 		  theMap.put(INCLINATION, str.trim()); ;
 	  }
-
-
+	  
+	  private static final String ECCENTRICITY = "eccentricity";
+	  @Field(offset = 69, length = 11, align = Align.RIGHT)
+	  public String getEccentricity() {
+	    return (String) theMap.get(ECCENTRICITY);
+	  }
+	  public void setEccentricity(String str) {
+		  theMap.put(ECCENTRICITY, str.trim()); 
+	  }
+	  
+	  private static final String MEAN_MOTION = "meanMotion";
+	  @Field(offset = 80, length = 12, align = Align.RIGHT)
+	  public String getMeanMotion() {
+	    return (String) theMap.get(MEAN_MOTION);
+	  }
+	  public void setMeanMotion(String str) {
+		  theMap.put(MEAN_MOTION, str.trim()); 
+	  }
+	  
+	  private static final String SEMI_MAJOR_AXIS = "semiMajorAxis";
+	  @Field(offset = 92, length = 13, align = Align.RIGHT)
+	  public String getSemiMajorAxis() {
+	    return (String) theMap.get(SEMI_MAJOR_AXIS);
+	  }
+	  public void setSemiMajorAxis(String str) {
+		  theMap.put(SEMI_MAJOR_AXIS, str.trim()); 
+	  }
+	  
+	  
 }
