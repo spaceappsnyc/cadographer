@@ -1,7 +1,8 @@
-package com.ibm.cloudoe.ecaas.samples;
+package org.cadographer;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,14 +10,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ibm.json.java.JSONArray;
 import com.ibm.json.java.JSONArtifact;
 import com.ibm.json.java.JSONObject;
+import org.apache.commons.logging.*;
+
+
 
 @WebServlet(urlPatterns ="/asteroid", loadOnStartup=1)
 public class AsteroidServlet extends HttpServlet {
 	private static final long serialVersionUID = 2L;
 	private static HashMap _asteroids;
+	private static Log logger = LogFactory.getLog(AsteroidServlet.class);
 	
 	public static final String DATA_SOURCE = "http://www.minorplanetcenter.net/iau/MPCORB/NEA.txt";
 
@@ -38,6 +42,8 @@ public class AsteroidServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
+	
+	
 	/**
 	 * Process /ecaas reuqest and return the relevant processing results
 	 *  
@@ -61,15 +67,16 @@ public class AsteroidServlet extends HttpServlet {
 			makeAsteroids();
 			
 			
-			JSONArtifact json = null;
+			JSONObject json = null;
 			
 			if (key!=null){
-				 json = (JSONArtifact)_asteroids.get(key);
+				 json = (JSONObject)_asteroids.get(key);
 			} else
 			{
 				 json = shipAsteroids();
 			}
 
+			//json.putAll(System.getenv());
 
 			response.getWriter().write(json.serialize());
 			

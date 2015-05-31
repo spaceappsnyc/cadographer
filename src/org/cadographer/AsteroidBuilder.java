@@ -1,4 +1,4 @@
-package com.ibm.cloudoe.ecaas.samples;
+package org.cadographer;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -60,34 +60,40 @@ public class AsteroidBuilder {
 
 	private HashMap enrichWithThreatInfo(HashMap asteroids) throws Exception {
 		// load the enrichment data
-		// FileUtils.writeStringToFile(new File("YAGOTH.txt"), "SCREAMM!");
-		BufferedReader in = new BufferedReader(new FileReader(new File(
-				"WebContent/impactdatalite.csv")));
-		String inputLine = null;
-		
 		HashMap threatDataMap = new HashMap();
-
-		while ((inputLine = in.readLine()) != null) {
-			// parse the line
-			// System.out.println(inputLine);
-			String[] data = inputLine.split(",");
+		
+		File theFile = new File(
+				"WebContent/impactdatalite.csv");
+		if (theFile.exists()) {
+			BufferedReader in = new BufferedReader(new FileReader(theFile));
+			String inputLine = null;
 			
-			HashMap values = new HashMap();
-			// shove data into a map
-			values.put("name", data[0]);
-			values.put("yearRange", data[1]);
-			values.put("potentialImpacts", data[2]);
-			values.put("impactProb", data[3]);
-			values.put("vKmPerSec", data[4]);
-			values.put(MinorPlanetLine.EST_DIAM, data[6]);
-			values.put(MinorPlanetLine.PALERMO_SCALE_CUM, data[7]);
-			values.put("palermoScaleMax", data[8]);
-			values.put("torinoScale", data[9]);
-
-			// shove that map into a map
-			threatDataMap.put(data[0], values);
-
+			while ((inputLine = in.readLine()) != null) {
+				// parse the line
+				// System.out.println(inputLine);
+				String[] data = inputLine.split(",");
+				
+				HashMap values = new HashMap();
+				// shove data into a map
+				values.put("name", data[0]);
+				values.put("yearRange", data[1]);
+				values.put("potentialImpacts", data[2]);
+				values.put("impactProb", data[3]);
+				values.put("vKmPerSec", data[4]);
+				values.put(MinorPlanetLine.EST_DIAM, data[6]);
+				values.put(MinorPlanetLine.PALERMO_SCALE_CUM, data[7]);
+				values.put("palermoScaleMax", data[8]);
+				values.put("torinoScale", data[9]);
+	
+				// shove that map into a map
+				threatDataMap.put(data[0], values);
+	
+			}
+			
+			
 		}
+		
+		
 
 		// Enrich the asteroids
 		Iterator iterator = asteroids.entrySet().iterator();

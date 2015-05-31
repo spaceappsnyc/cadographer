@@ -1,4 +1,4 @@
-package com.ibm.cloudoe.ecaas.samples;
+package org.cadographer;
 
 import java.util.HashMap;
 

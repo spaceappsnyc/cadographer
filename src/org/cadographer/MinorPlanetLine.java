@@ -1,11 +1,10 @@
-package com.ibm.cloudoe.ecaas.samples;
+package org.cadographer;
 
 import java.util.HashMap;
 
 import com.ancientprogramming.fixedformat4j.annotation.Align;
 import com.ancientprogramming.fixedformat4j.annotation.Field;
 import com.ancientprogramming.fixedformat4j.annotation.Record;
-import com.ibm.json.java.JSONObject;
 
 @Record
 public class MinorPlanetLine {

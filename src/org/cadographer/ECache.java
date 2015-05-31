@@ -1,4 +1,4 @@
-package com.ibm.cloudoe.ecaas.samples;
+package org.cadographer;
 
 /**
  * Define the elastic caching POJO, mainly in order to program operation, such
