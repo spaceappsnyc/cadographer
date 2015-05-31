@@ -1,5 +1,6 @@
 package org.cadographer;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,9 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ibm.json.java.JSONArtifact;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.ibm.json.java.JSONObject;
-import org.apache.commons.logging.*;
 
 
 
@@ -76,40 +78,36 @@ public class AsteroidServlet extends HttpServlet {
 				 json = shipAsteroids();
 			}
 
-			//json.putAll(System.getenv());
+			//json.putAll(whatsMyRoot());
 
 			response.getWriter().write(json.serialize());
 			
-			//
-			
-//			if ("get".equals(operation)) {
-//				// get value of this key.
-//				retrievedValue = ECacheConnection.getData(mapName, key);
-//				response.getWriter().write(retrievedValue == null ? "null" : retrievedValue.toString());
-//				System.out.println("retrieved: " + retrievedValue);
-//			} else if ("put".equals(operation)) {
-//				// update or insert this value.
-//				ECacheConnection.postData(mapName, key, newValue);
-//				response.getWriter().write("Put successfull.");
-//				System.out.println("put key=" + key + " value=" + newValue);
-//			} else if ("delete".equals(operation)) {
-//				// delete this key/value.
-//				ECacheConnection.deleteData(mapName, key);
-//				response.getWriter().write("Remove successfull.");
-//				System.out.println("deleted key=" + key);
-//			} else if ("all".equals(operation)) {
-//				// get all key/value
-//				List<ECache> list = ECacheConnection.getAllData(mapName);
-//				String res = list.toString();
-//				response.getWriter().write(res);
-//				System.out.println("grid entries:" + res);
-//				System.out.println("grid entries size:" + list == null ? 0: list.size());
-//			}
+	
 		} catch (Exception e) {
 			System.out.println("Failed to perform operation on map.");
 			e.printStackTrace();
 			response.setStatus(500);
 		}
+	}
+
+	private Map whatsMyRoot() {
+		HashMap myMap = new HashMap();
+		
+		File root = new File(".");
+		myMap.put("root", root.getAbsolutePath());
+		if (root.isDirectory()){
+			String[] listing = root.list();
+			StringBuilder contents = new StringBuilder();
+			
+			for (int i=0;i<listing.length;i++)
+			{
+				contents.append(listing[i] + "|");
+			}
+			
+			myMap.put("root contents", contents.toString());	
+		}
+		
+		return myMap;
 	}
 
 	private JSONObject shipAsteroids() {

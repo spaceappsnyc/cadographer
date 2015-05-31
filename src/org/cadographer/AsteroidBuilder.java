@@ -11,8 +11,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.io.FileUtils;
-
 import com.ancientprogramming.fixedformat4j.format.FixedFormatManager;
 import com.ancientprogramming.fixedformat4j.format.impl.FixedFormatManagerImpl;
 
@@ -62,8 +60,13 @@ public class AsteroidBuilder {
 		// load the enrichment data
 		HashMap threatDataMap = new HashMap();
 		
+		String pathToImpactData = ConfigurationServices.get("fileRoot");
+		
 		File theFile = new File(
-				"WebContent/impactdatalite.csv");
+				pathToImpactData + "impactdatalite.csv");
+		
+		System.out.println(theFile.getAbsolutePath());
+		
 		if (theFile.exists()) {
 			BufferedReader in = new BufferedReader(new FileReader(theFile));
 			String inputLine = null;
